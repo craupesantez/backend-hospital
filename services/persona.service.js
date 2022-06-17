@@ -1,55 +1,38 @@
-const faker = require('faker');
 const boom = require('@hapi/boom');
+const { models} = require('./../libs/sequelize');
 
 class PersonasService{
-
   constructor(){
-    this.personas =[];
+    // this.personas =[];
   }
 
   async create(data){
-    const newPersona = {
-      id: faker.datatype.uuid(),
-      ...data,
-    }
-    this.personas.push(newPersona);
+    const newPersona = await models.Persona.create(data);
     return newPersona;
   }
 
   async find(){
-    return this.personas;
+    const rta = await models.Persona.findAll();
+    return rta;
   }
 
   async findOne(id){
-    const persona = this.personas.find(item => item.id === id);
+    const persona = await models.Persona.findByPk(id);
     if(!persona){
       throw boom.notFound('persona no encontrado');
-    }
-    if( persona.isBlock){
-      throw boom.notFound('persona esta bloqueada');
     }
     return persona;
   }
 
   async update(id, changes){
-    const index = this.personas.findIndex(item => item.id === id);
-    if(index === -1){
-      throw boom.notFound('persona no encontrado');//new Error('Persona no encontrada');
-    }
-    const persona = this.personas[index];
-    this.personas[index] = {
-      ...persona,
-      ...changes
-    };
-    return this.personas[index];
+    const persona = await this.findOne(id);
+    const rta = await persona.update(changes);
+    return rta;
   }
 
   async delete(id){
-    const index = this.personas.findIndex(item => item.id === id);
-    if(index === -1){
-      throw boom.notFound('persona no encontrado');
-    }
-    this.personas.splice(index, 1);
+    const persona = await this.findOne(id);
+    await persona.destroy();
     return { id };
   }
 }
