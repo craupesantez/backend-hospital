@@ -1,52 +1,99 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
+const { USUARIO_TABLE } = require('./usuario.model');
+const { CATALOGO_TABLE } = require('./catalogo.model');
+
 const PERSONA_TABLE = 'persona';
 
 const PersonaSchema = {
-  id:{
+  id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
     type: DataTypes.INTEGER
   },
-  nombres:{
+  nombres: {
     allowNull: false,
     type: DataTypes.STRING
   },
-  apellidos:{
+  apellidos: {
     allowNull: false,
     type: DataTypes.STRING
   },
-  telefono:{
+  identificacion: {
+    allowNull: false,
+    type: DataTypes.STRING,
+    unique: true,
+  },
+  telefono: {
     allowNull: false,
     type: DataTypes.STRING
   },
-  foto:{
+  correo: {
+    allowNull: false,
+    type: DataTypes.STRING,
+    unique: true,
+  },
+  foto: {
     allowNull: true,
     type: DataTypes.STRING
   },
-  fechaNacimiento:{
+  fechaNacimiento: {
     allowNull: false,
     type: DataTypes.DATE
   },
-  fechaRegistro:{
+  fechaRegistro: {
     allowNull: false,
     type: DataTypes.DATE,
     defaultValue: Sequelize.NOW
   },
-  fechaActualizo:{
+  fechaActualizo: {
     allowNull: false,
     type: DataTypes.DATE,
     defaultValue: Sequelize.NOW
+  },
+  usuarioId: {
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    unique: true,
+    references: {
+      model: USUARIO_TABLE,
+      key: 'id'
+    },
+    onUpdate:'CASCADE',
+    onDelete: 'SET NULL'
+  },
+  catalogoId: {
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    references: {
+      model: CATALOGO_TABLE,
+      key: 'id'
+    },
+    onUpdate:'CASCADE',
+    onDelete: 'SET NULL'
   }
 };
 
-class Persona extends Model{
-  static associate(){
-
+class Persona extends Model {
+  static associate(models) {
+    this.belongsTo(models.Usuario, { as: 'usuario' });
+    this.belongsTo(models.Catalogo, { as: 'catalogo' });
+    this.belongsToMany(models.Especialidad, {
+      as: 'ramas',
+      through: models.PersonaEspecialidad,
+      foreignKey: 'personaId',
+      otherKey: 'especialidadId'
+    });
+    this.belongsToMany(models.Rol, {
+      as: 'roles',
+      through: models.PersonaRol,
+      foreignKey: 'personaId',
+      otherKey: 'rolId'
+    });
   }
 
-  static config(sequelize){
+  static config(sequelize) {
     return {
       sequelize,
       tableName: PERSONA_TABLE,
@@ -56,4 +103,4 @@ class Persona extends Model{
   }
 }
 
-module.exports = { PERSONA_TABLE, PersonaSchema, Persona}
+module.exports = { PERSONA_TABLE, PersonaSchema, Persona }

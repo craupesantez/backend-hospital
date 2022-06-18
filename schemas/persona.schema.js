@@ -1,45 +1,56 @@
 const Joi = require('joi');
 
-const id  = Joi.string().uuid();
+const id  = Joi.number().integer();
 const nombres = Joi.string();
 const apellidos = Joi.string();
-const identificacion = Joi.string().min(10).max(10);
 const telefono = Joi.string().min(7).max(10);
-const fechaNacimiento = Joi.date();
-const correo = Joi.string().email();
-const usuario = Joi.string().min(6).max(15);
-const contrasenia = Joi.string().min(8).max(20);
 const foto = Joi.string().uri();
-// const contraseniaRepetida = Joi.ref(constrasenia);
+const fechaNacimiento = Joi.date();
+const identificacion = Joi.string().min(10).max(10);
+const correo = Joi.string().email();
+const usuarioId = Joi.number().integer();
+const username = Joi.string().min(8);
+const contrasenia = Joi.string().min(8);
+const catalogoId = Joi.number().integer();
+
+const personaId= Joi.number().integer();
+const especialidadId = Joi.number().integer();
+
 
 const createPersonaSchema = Joi.object({
   nombres: nombres.required(),
   apellidos: apellidos.required(),
-  identificacion: identificacion.required(),
   telefono: telefono.required(),
-  fechaNacimiento: fechaNacimiento,
-  correo: correo.required(),
-  usuario: usuario.required,
-  contrasenia: contrasenia.required(),
   foto: foto.required(),
-  // contraseniaRepetida: Joi.ref(contrasenia)
+  fechaNacimiento: fechaNacimiento,
+  identificacion: identificacion.required(),
+  correo: correo.required(),
+  usuario: Joi.object({
+    username: username.required(),
+    contrasenia: contrasenia.required(),
+  }),
+  catalogoId: catalogoId.required(),
 })
 
 const updatePersonaSchema = Joi.object({
   nombres: nombres,
   apellidos: apellidos,
-  identificacion: identificacion,
   telefono: telefono,
-  fechaNacimiento: fechaNacimiento,
-  correo: correo,
-  usuario: usuario,
-  contrasenia: contrasenia,
   foto: foto,
-  // contraseniaRepetida: Joi.ref(contrasenia)
+  fechaNacimiento: fechaNacimiento,
+  identificacion: identificacion,
+  correo: correo,
+  usuarioId,
+  catalogoId
 })
 
 const getPersonaSchema = Joi.object({
   id: id.required(),
 })
 
-module.exports = { createPersonaSchema, updatePersonaSchema, getPersonaSchema};
+const addRamasSchema = Joi.object({
+  personaId: personaId.required(),
+  especialidadId: especialidadId.required(),
+});
+
+module.exports = { createPersonaSchema, updatePersonaSchema, getPersonaSchema, addRamasSchema};
