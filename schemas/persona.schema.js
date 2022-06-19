@@ -6,7 +6,7 @@ const apellidos = Joi.string();
 const telefono = Joi.string().min(7).max(10);
 const foto = Joi.string().uri();
 const fechaNacimiento = Joi.date();
-const identificacion = Joi.string().min(10).max(10);
+const identificacion = Joi.string().min(8).max(10);
 const correo = Joi.string().email();
 const usuarioId = Joi.number().integer();
 const username = Joi.string().min(8);
@@ -15,6 +15,7 @@ const catalogoId = Joi.number().integer();
 
 const personaId= Joi.number().integer();
 const especialidadId = Joi.number().integer();
+const rolId = Joi.number().integer();
 
 
 const createPersonaSchema = Joi.object({
@@ -53,4 +54,9 @@ const addRamasSchema = Joi.object({
   especialidadId: especialidadId.required(),
 });
 
-module.exports = { createPersonaSchema, updatePersonaSchema, getPersonaSchema, addRamasSchema};
+const addRolesSchema = Joi.object({
+  personaId: personaId.required(),
+  rolId: rolId.required(),
+});
+
+module.exports = { createPersonaSchema, updatePersonaSchema, getPersonaSchema, addRamasSchema, addRolesSchema};

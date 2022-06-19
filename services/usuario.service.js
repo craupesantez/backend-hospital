@@ -13,7 +13,18 @@ class UsuariosService {
 
   async find() {
     const rta = await models.Usuario.findAll({
-      includes: ['persona']
+      include: ['persona']
+    });
+    return rta;
+  }
+
+  async findByUsername(username) {
+    const rta = await models.Usuario.findOne({
+      include: [{
+        association: 'persona',
+        include: ['roles']
+      }],
+      where: { username }
     });
     return rta;
   }

@@ -28,11 +28,11 @@ const EspecialidadSchema = {
     defaultValue: Sequelize.NOW
   },
   usuarioRegistro:{
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.STRING
   },
   usuarioActualizo:{
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.STRING
   },
 }

@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const PersonasService = require('../services/persona.service');
 const validatorHandler = require('../middlewares/validator.handler');
-const { createPersonaSchema, updatePersonaSchema, getPersonaSchema, addRamasSchema } = require('../schemas/persona.schema');
+const { createPersonaSchema, updatePersonaSchema, getPersonaSchema,
+  addRamasSchema, addRolesSchema } = require('../schemas/persona.schema');
 
 const service = new PersonasService();
 
@@ -47,7 +48,7 @@ router.patch('/:id',
     }
   })
 
-  router.delete('/:id',
+router.delete('/:id',
   validatorHandler(getPersonaSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -58,13 +59,25 @@ router.patch('/:id',
     }
   });
 
-  router.post('/add-especialidad',
+router.post('/add-especialidad',
   validatorHandler(addRamasSchema, 'body'),
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newRama =await service.addEspecialidad(body)
+      const newRama = await service.addEspecialidad(body)
       res.status(201).json(newRama);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+router.post('/add-rol',
+  validatorHandler(addRolesSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const newRol = await service.addRol(body)
+      res.status(201).json(newRol);
     } catch (error) {
       next(error);
     }

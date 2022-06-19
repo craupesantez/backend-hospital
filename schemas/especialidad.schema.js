@@ -9,8 +9,8 @@ const usuarioActualizo = Joi.string();
 const createEspecialidadSchema = Joi.object({
   nombre: nombre.required(),
   estado: estado.required(),
-  usuarioRegistro: usuarioRegistro.required(),
-  usuarioActualizo: usuarioActualizo.required(),
+  usuarioRegistro: usuarioRegistro,
+  usuarioActualizo: usuarioActualizo,
 })
 
 const updateEspecialidadSchema = Joi.object({

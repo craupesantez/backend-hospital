@@ -1,5 +1,6 @@
 const boom = require('@hapi/boom');
 const { models} = require('./../libs/sequelize');
+const bcrypt = require('bcrypt');
 
 class PersonasService{
   constructor(){
@@ -12,9 +13,18 @@ class PersonasService{
     //   ...data,
     //   usuarioId: newUsuario.id
     // });
-    const newPersona = await models.Persona.create(data, {
+    const hash = await bcrypt.hash(data.usuario.contrasenia, 10);
+    const newData = {
+      ...data,
+      usuario: {
+        ...data.usuario,
+        contrasenia: hash
+      }
+    }
+    const newPersona = await models.Persona.create(newData,{
       include: ['usuario']
     });
+      delete newPersona.dataValues.usuario.dataValues.contrasenia;
     return newPersona;
   }
 
@@ -23,9 +33,14 @@ class PersonasService{
     return newRama;
   }
 
+  async addRol(data){
+    const newRol = await models.PersonaRol.create(data);
+    return newRol;
+  }
+
   async find(){
     const rta = await models.Persona.findAll({
-      include: ['usuario','catalogo'],
+      include: ['usuario','catalogo', 'roles'],
     });
     return rta;
   }

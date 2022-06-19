@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const EspecialidadesService = require('../services/especialidad.service');
 const validatorHandler = require('../middlewares/validator.handler');
-const { createEspecialidadSchema, updateEspecialidadSchema, getEspecialidadSchema } = require('../schemas/persona.schema');
+const {checkAdminRole} = require('../middlewares/auth.handler');
+const { createEspecialidadSchema, updateEspecialidadSchema, getEspecialidadSchema } = require('../schemas/especialidad.schema');
+const passport = require('passport');
 
 const service = new EspecialidadesService();
 
@@ -32,6 +34,8 @@ router.get('/:idEspecialidad/personas/:idPersona',(req, res) => {
 })
 
 router.post('/',
+  passport.authenticate('jwt', {session: false}),
+  checkAdminRole,
   validatorHandler(createEspecialidadSchema, 'body'),
   async (req, res, next) => {
     try {
