@@ -2,16 +2,19 @@ const express = require('express');
 const router = express.Router();
 const EspecialidadesService = require('../services/especialidad.service');
 const validatorHandler = require('../middlewares/validator.handler');
-const {checkAdminRole} = require('../middlewares/auth.handler');
+const { checkAdminRole } = require('../middlewares/auth.handler');
 const { createEspecialidadSchema, updateEspecialidadSchema, getEspecialidadSchema } = require('../schemas/especialidad.schema');
 const passport = require('passport');
 
 const service = new EspecialidadesService();
 
-router.get('/', async (req, res) => {
-  const especialidades = await service.find();
-  res.json(especialidades);
-})
+router.get('/',
+  passport.authenticate('jwt', { session: false }),
+  checkAdminRole,
+  async (req, res) => {
+    const especialidades = await service.find();
+    res.json(especialidades);
+  })
 
 router.get('/:id',
   validatorHandler(getEspecialidadSchema, 'params'),
@@ -25,8 +28,8 @@ router.get('/:id',
     }
   })
 
-router.get('/:idEspecialidad/personas/:idPersona',(req, res) => {
-  const{idEspecialidad, idPersona} = req.params;
+router.get('/:idEspecialidad/personas/:idPersona', (req, res) => {
+  const { idEspecialidad, idPersona } = req.params;
   res.json({
     idEspecialidad,
     idPersona
@@ -34,7 +37,7 @@ router.get('/:idEspecialidad/personas/:idPersona',(req, res) => {
 })
 
 router.post('/',
-  passport.authenticate('jwt', {session: false}),
+  passport.authenticate('jwt', { session: false }),
   checkAdminRole,
   validatorHandler(createEspecialidadSchema, 'body'),
   async (req, res, next) => {
@@ -59,7 +62,7 @@ router.patch('/:id',
     }
   })
 
-  router.delete('/:id',
+router.delete('/:id',
   validatorHandler(getEspecialidadSchema, 'params'),
   async (req, res, next) => {
     try {
