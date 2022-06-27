@@ -8,11 +8,6 @@ class PersonasService{
   }
 
   async create(data){
-    // const newUsuario = await models.Usuario.create(data.usuario);
-    // const newPersona = await models.Persona.create({
-    //   ...data,
-    //   usuarioId: newUsuario.id
-    // });
     const hash = await bcrypt.hash(data.usuario.contrasenia, 10);
     const newData = {
       ...data,
@@ -25,6 +20,13 @@ class PersonasService{
       include: ['usuario']
     });
       delete newPersona.dataValues.usuario.dataValues.contrasenia;
+    const paciente = {
+      personaId : newPersona.dataValues.id,
+      rolId: 2
+    };
+    console.log(paciente);
+    const newRolPaciente= await this.addRol(paciente);
+    console.log(newRolPaciente);
     return newPersona;
   }
 

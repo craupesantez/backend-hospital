@@ -22,7 +22,7 @@ const createPersonaSchema = Joi.object({
   nombres: nombres.required(),
   apellidos: apellidos.required(),
   telefono: telefono.required(),
-  foto: foto.required(),
+  foto: foto,
   fechaNacimiento: fechaNacimiento,
   identificacion: identificacion.required(),
   correo: correo.required(),
