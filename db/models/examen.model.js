@@ -2,9 +2,9 @@ const { Model, DataTypes, Sequelize } = require('sequelize');
 
 // const { USUARIO_TABLE } = require('./usuario.model')
 
-const ROL_TABLE = 'rol';
+const EXAMEN_TABLE = 'examen';
 
-const RolSchema = {
+const ExamenSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -15,14 +15,22 @@ const RolSchema = {
     allowNull: false,
     type: DataTypes.STRING
   },
+  descripcion: {
+    allowNull: true,
+    type: DataTypes.STRING,
+  },
+  requisitos: {
+    allowNull: true,
+    type: DataTypes.STRING,
+  },
   activo: {
     allowNull: false,
     type: DataTypes.BOOLEAN,
     defaultValue: true,
-  }
+  },
 };
 
-class Rol extends Model {
+class Examen extends Model {
   static associate(models) {
 
   }
@@ -30,11 +38,11 @@ class Rol extends Model {
   static config(sequelize) {
     return {
       sequelize,
-      tableName: ROL_TABLE,
-      modelName: 'Rol',
+      tableName: EXAMEN_TABLE,
+      modelName: 'Examen',
       timestamps: false
     }
   }
 }
 
-module.exports = { ROL_TABLE, RolSchema, Rol }
+module.exports = { EXAMEN_TABLE, ExamenSchema, Examen }

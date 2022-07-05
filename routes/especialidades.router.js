@@ -9,8 +9,8 @@ const passport = require('passport');
 const service = new EspecialidadesService();
 
 router.get('/',
-  passport.authenticate('jwt', { session: false }),
-  checkAdminRole,
+  //  passport.authenticate('jwt', { session: false }),
+  // checkAdminRole,
   async (req, res) => {
     const especialidades = await service.find();
     res.json(especialidades);
@@ -37,8 +37,8 @@ router.get('/:idEspecialidad/personas/:idPersona', (req, res) => {
 })
 
 router.post('/',
-  passport.authenticate('jwt', { session: false }),
-  checkAdminRole,
+  // passport.authenticate('jwt', { session: false }),
+ // checkAdminRole,
   validatorHandler(createEspecialidadSchema, 'body'),
   async (req, res, next) => {
     try {

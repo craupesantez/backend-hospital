@@ -3,7 +3,7 @@ const router = express.Router();
 const PersonasService = require('../services/persona.service');
 const validatorHandler = require('../middlewares/validator.handler');
 const { createPersonaSchema, updatePersonaSchema, getPersonaSchema,
-  addRamasSchema, addRolesSchema } = require('../schemas/persona.schema');
+  addRamasSchema, addRolesSchema, getPersonaByIdentificacionSchema } = require('../schemas/persona.schema');
 
 const service = new PersonasService();
 
@@ -12,6 +12,18 @@ router.get('/', async (req, res) => {
   res.json(personas);
 })
 
+router.get('/by-identificacion/:identificacion',
+  validatorHandler(getPersonaByIdentificacionSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { identificacion } = req.params;
+      const persona = await service.findIdentificacion(identificacion);
+      res.json(persona);
+    } catch (error) {
+      next(error);
+    }
+  }
+  )
 router.get('/:id',
   validatorHandler(getPersonaSchema, 'params'),
   async (req, res, next) => {
@@ -24,12 +36,24 @@ router.get('/:id',
     }
   })
 
+
 router.post('/',
   validatorHandler(createPersonaSchema, 'body'),
   async (req, res, next) => {
     try {
       const body = req.body;
       res.status(201).json(await service.create(body));
+    } catch (error) {
+      next(error);
+    }
+  })
+
+  router.post('/personal',
+  validatorHandler(createPersonaSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      res.status(201).json(await service.createPersonal(body));
     } catch (error) {
       next(error);
     }

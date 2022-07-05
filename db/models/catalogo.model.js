@@ -26,6 +26,11 @@ const CatalogoSchema = {
   padre: {
     allowNull: true,
     type: DataTypes.STRING
+  },
+  activo:{
+    allowNull: false,
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
   }
 };
 
@@ -34,6 +39,14 @@ class Catalogo extends Model {
     this.hasMany(models.Persona, {
       as: 'personas',
       foreignKey: 'catalogoId'
+    });
+    this.hasMany(models.Persona, {
+      as: 'genero',
+      foreignKey: 'generoId'
+    });
+    this.hasMany(models.Persona, {
+      as: 'tipoIdentificacion',
+      foreignKey: 'tipoIdentificacionId'
     })
   }
 

@@ -13,9 +13,10 @@ const EspecialidadSchema = {
     allowNull: false,
     type: DataTypes.STRING
   },
-  estado:{
+  activo:{
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
   },
   fechaRegistro:{
     allowNull: false,
@@ -39,7 +40,11 @@ const EspecialidadSchema = {
 
 class Especialidad extends Model{
   static associate(){
-
+    // puede o no puede que se deba incluir
+    // this.hasOne(models.Persona, {
+    //   as:'persona',
+    //   foreignKey: 'especialidadId'
+    // });
   }
 
   static config(sequelize){

@@ -1,4 +1,4 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
+const { Model, DataTypes, Sequelize, QueryTypes } = require('sequelize');
 
 const { USUARIO_TABLE } = require('./usuario.model');
 const { CATALOGO_TABLE } = require('./catalogo.model');
@@ -72,13 +72,40 @@ const PersonaSchema = {
     },
     onUpdate:'CASCADE',
     onDelete: 'SET NULL'
-  }
+  },
+  generoId: {
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    references: {
+      model: CATALOGO_TABLE,
+      key: 'id'
+    },
+    onUpdate:'CASCADE',
+    onDelete: 'SET NULL'
+  },
+  tipoIdentificacionId: {
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    references: {
+      model: CATALOGO_TABLE,
+      key: 'id'
+    },
+    onUpdate:'CASCADE',
+    onDelete: 'SET NULL'
+  },
+  activo: {
+    allowNull: false,
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+  },
 };
 
 class Persona extends Model {
   static associate(models) {
     this.belongsTo(models.Usuario, { as: 'usuario' });
     this.belongsTo(models.Catalogo, { as: 'catalogo' });
+    this.belongsTo(models.Catalogo, { as: 'genero' });
+    this.belongsTo(models.Catalogo, { as: 'tipoIdentificacion' });
     this.belongsToMany(models.Especialidad, {
       as: 'ramas',
       through: models.PersonaEspecialidad,
@@ -91,6 +118,14 @@ class Persona extends Model {
       foreignKey: 'personaId',
       otherKey: 'rolId'
     });
+    this.hasMany(models.Cita,{
+      as: 'paciente_citas',
+      foreignKey: 'pacienteId'
+    });
+    this.hasMany(models.Cita,{
+      as: 'medico_citas',
+      foreignKey: 'medicoId'
+    })
   }
 
   static config(sequelize) {

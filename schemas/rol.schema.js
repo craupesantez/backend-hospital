@@ -2,17 +2,17 @@ const Joi = require('joi');
 
 const id  = Joi.number().integer();
 const nombre = Joi.string();
-const estado = Joi.string();
+const activo = Joi.boolean();
 
 
 const createRolSchema = Joi.object({
   nombre: nombre.required(),
-  estado: estado.required(),
+  activo: activo.required(),
 })
 
 const updateRolSchema = Joi.object({
   nombre: nombre,
-  estado: estado,
+  activo: activo,
 })
 
 const getRolSchema = Joi.object({

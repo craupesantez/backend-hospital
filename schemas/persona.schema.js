@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const id  = Joi.number().integer();
+const id = Joi.number().integer();
 const nombres = Joi.string();
 const apellidos = Joi.string();
 const telefono = Joi.string().min(7).max(10);
@@ -12,8 +12,12 @@ const usuarioId = Joi.number().integer();
 const username = Joi.string().min(8);
 const contrasenia = Joi.string().min(8);
 const catalogoId = Joi.number().integer();
+const generoId = Joi.number().integer();
+const tipoIdentificacionId = Joi.number().integer();
+const fechaActualizo = Joi.date();
+const activo = Joi.boolean();
 
-const personaId= Joi.number().integer();
+const personaId = Joi.number().integer();
 const especialidadId = Joi.number().integer();
 const rolId = Joi.number().integer();
 
@@ -31,6 +35,9 @@ const createPersonaSchema = Joi.object({
     contrasenia: contrasenia.required(),
   }),
   catalogoId: catalogoId.required(),
+  generoId: generoId.required(),
+  tipoIdentificacionId: tipoIdentificacionId.required(),
+  activo: activo.required(),
 })
 
 const updatePersonaSchema = Joi.object({
@@ -42,11 +49,19 @@ const updatePersonaSchema = Joi.object({
   identificacion: identificacion,
   correo: correo,
   usuarioId,
-  catalogoId
+  catalogoId,
+  generoId,
+  tipoIdentificacionId,
+  fechaActualizo,
+  activo
 })
 
 const getPersonaSchema = Joi.object({
   id: id.required(),
+})
+
+const getPersonaByIdentificacionSchema = Joi.object({
+  identificacion: identificacion.required(),
 })
 
 const addRamasSchema = Joi.object({
@@ -59,4 +74,4 @@ const addRolesSchema = Joi.object({
   rolId: rolId.required(),
 });
 
-module.exports = { createPersonaSchema, updatePersonaSchema, getPersonaSchema, addRamasSchema, addRolesSchema};
+module.exports = { createPersonaSchema, updatePersonaSchema, getPersonaSchema, addRamasSchema, addRolesSchema, getPersonaByIdentificacionSchema };

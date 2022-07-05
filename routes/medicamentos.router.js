@@ -1,28 +1,28 @@
 const express = require('express');
 const router = express.Router();
-const ExamenesService = require('../services/examen.service');
+const MedicamentosService = require('../services/medicamento.service');
 const validatorHandler = require('../middlewares/validator.handler');
 const { checkAdminRole } = require('../middlewares/auth.handler');
-const { createExamenSchema, updateExamenSchema, getExamenSchema } = require('../schemas/examen.schema');
+const { createMedicamentoSchema, updateMedicamentoSchema, getMedicamentoSchema } = require('../schemas/medicamento.schema');
 const passport = require('passport');
 
-const service = new ExamenesService();
+const service = new MedicamentosService();
 
 router.get('/',
   //  passport.authenticate('jwt', { session: false }),
   // checkAdminRole,
   async (req, res) => {
-    const examenes = await service.find();
-    res.json(examenes);
+    const medicamentos = await service.find();
+    res.json(medicamentos);
   })
 
 router.get('/:id',
-  validatorHandler(getExamenSchema, 'params'),
+  validatorHandler(getMedicamentoSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const examen = await service.findOne(id);
-      res.json(examen);
+      const medicamento = await service.findOne(id);
+      res.json(medicamento);
     } catch (error) {
       next(error);
     }
@@ -31,7 +31,7 @@ router.get('/:id',
 router.post('/',
   // passport.authenticate('jwt', { session: false }),
  // checkAdminRole,
-  validatorHandler(createExamenSchema, 'body'),
+  validatorHandler(createMedicamentoSchema, 'body'),
   async (req, res, next) => {
     try {
       const body = req.body;
@@ -42,8 +42,8 @@ router.post('/',
   })
 
 router.patch('/:id',
-  validatorHandler(getExamenSchema, 'params'),
-  validatorHandler(updateExamenSchema, 'body'),
+  validatorHandler(getMedicamentoSchema, 'params'),
+  validatorHandler(updateMedicamentoSchema, 'body'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -55,7 +55,7 @@ router.patch('/:id',
   })
 
 router.delete('/:id',
-  validatorHandler(getExamenSchema, 'params'),
+  validatorHandler(getMedicamentoSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;

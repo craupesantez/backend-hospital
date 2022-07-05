@@ -5,20 +5,23 @@ const tipo = Joi.string();
 const nombre = Joi.string();
 const descripcion = Joi.string();
 const padre = Joi.string();
+const activo = Joi.boolean();
 
 
 const createCatalogoSchema = Joi.object({
   tipo: tipo.required(),
   nombre: nombre.required(),
-  descripcion: descripcion,
+  descripcion,
   padre: padre,
+  activo: activo.required()
 })
 
 const updateCatalogoSchema = Joi.object({
   tipo: tipo,
   nombre: nombre,
-  descripcion: descripcion,
+  descripcion,
   padre: padre,
+  activo: activo
 })
 
 const getCatalogoSchema = Joi.object({
