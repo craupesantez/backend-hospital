@@ -62,7 +62,7 @@ class PersonasService {
 
   async find() {
     const rta = await models.Persona.findAll({
-      include: ['usuario', 'catalogo', 'roles', 'genero', 'tipoIdentificacion'],
+      include: ['usuario', 'catalogo', 'roles', 'genero', 'tipoIdentificacion','ramas'],
     });
     rta.map((item) =>
       delete item.dataValues.usuario.dataValues.contrasenia
@@ -82,6 +82,22 @@ class PersonasService {
     return persona;
   }
 
+  async findOneRol(id){
+    const personaRol = await models.PersonaRol.findByPk(id);
+    if (!personaRol) {
+      throw boom.notFound('Rol de la persona no encontrado');
+    }
+    return personaRol;
+  }
+
+  async findOneEspecialidad(id){
+    const personaEspecialidad = await models.PersonaEspecialidad.findByPk(id);
+    if (!personaEspecialidad) {
+      throw boom.notFound('Especialidad de la persona no encontrado');
+    }
+    return personaEspecialidad;
+  }
+
   async update(id, changes) {
     const persona = await this.findOne(id);
     const rta = await persona.update(changes);
@@ -91,6 +107,17 @@ class PersonasService {
   async delete(id) {
     const persona = await this.findOne(id);
     await persona.destroy();
+    return { id };
+  }
+  async deleteRol(id){
+    const personaRol = await this.findOneRol(id);
+    await personaRol.destroy();
+    return { id };
+  }
+
+  async deleteEspecialidad(id){
+    const personaEspecialidad = await this.findOneEspecialidad(id);
+    await personaEspecialidad.destroy();
     return { id };
   }
 

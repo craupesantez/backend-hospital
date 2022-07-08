@@ -83,6 +83,28 @@ router.delete('/:id',
     }
   });
 
+  router.delete('/deleteRol/:id',
+  validatorHandler(getPersonaSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      res.status(200).json(await service.deleteRol(id));
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.delete('/deleteEspecialidad/:id',
+  validatorHandler(getPersonaSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      res.status(200).json(await service.deleteEspecialidad(id));
+    } catch (error) {
+      next(error);
+    }
+  });
+
 router.post('/add-especialidad',
   validatorHandler(addRamasSchema, 'body'),
   async (req, res, next) => {
