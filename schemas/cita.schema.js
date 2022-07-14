@@ -3,17 +3,20 @@ const Joi = require('joi');
 const id = Joi.number().integer();
 const motivo = Joi.string();
 const detalle = Joi.string();
-// const fraccion = Joi.string();
+const fraccion = Joi.any();
 const diagnostico = Joi.string();
 const costo = Joi.number();
 const fechaInicio = Joi.date();
 const fechaActualizo = Joi.date();
 const color = Joi.string();
+const hora = Joi.any();
 
 const estadoId = Joi.number().integer();
 const pacienteId = Joi.number().integer();
 const medicoId = Joi.number().integer();
+const especialidadId = Joi.number().integer();
 
+const citaId = Joi.number().integer();
 const examenId = Joi.number().integer();
 const medicamentoId = Joi.number().integer();
 
@@ -27,9 +30,12 @@ const createCitaSchema = Joi.object({
   costo,
   fechaInicio: fechaInicio.required(),
   color,
+  fraccion: fraccion.required(),
+  hora: hora.required(),
   estadoId: estadoId.required(),
   pacienteId: pacienteId.required(),
   medicoId: medicoId.required(),
+  especialidadId: especialidadId.required(),
 })
 
 const updateCitaSchema = Joi.object({
@@ -39,10 +45,12 @@ const updateCitaSchema = Joi.object({
   fraccion,
   diagnostico,
   fechaInicio,
+  hora,
   color,
   estadoId,
   pacienteId,
   medicoId,
+  especialidadId,
 })
 
 const getCitaSchema = Joi.object({
@@ -50,16 +58,31 @@ const getCitaSchema = Joi.object({
 })
 
 const addExamenesSchema = Joi.object({
-  citaId: personaId.required(),
-  examenId: especialidadId.required(),
-  resultado: resultado.required(),
+  citaId: citaId.required(),
+  examenId: examenId.required(),
+  resultado: resultado,
 });
+
 
 const addMedicamentosSchema = Joi.object({
-  citaId: personaId.required(),
-  medicamentoId: especialidadId.required(),
-  indicaciones: resultado.required(),
-  cantidad: resultado.required(),
+  citaId: citaId.required(),
+  medicamentoId: medicamentoId.required(),
+  indicaciones: indicaciones,
+  cantidad: cantidad,
 });
 
-module.exports = { createCitaSchema, updateCitaSchema, getCitaSchema, addExamenesSchema, addMedicamentosSchema };
+const updateExamenesSchema = Joi.object({
+  citaId: citaId,
+  examenId: examenId,
+  resultado: resultado,
+});
+
+const updateMedicamentosSchema = Joi.object({
+  citaId: citaId.required(),
+  medicamentoId: medicamentoId.required(),
+  indicaciones: indicaciones,
+  cantidad: cantidad,
+});
+
+module.exports = { createCitaSchema, updateCitaSchema, getCitaSchema, addExamenesSchema,
+  addMedicamentosSchema, updateExamenesSchema, updateMedicamentosSchema };

@@ -33,7 +33,7 @@ const CitaExamenSchema = {
     onDelete: 'SET NULL'
   },
   resultado: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.STRING
   },
 }

@@ -2,7 +2,7 @@ const { Model, DataTypes, Sequelize, QueryTypes } = require('sequelize');
 
  const { PERSONA_TABLE } = require('./persona.model');
  const { CATALOGO_TABLE } = require('./catalogo.model');
-
+ const { ESPECIALIDAD_TABLE } = require('./especialidad.model');
 
 const CITA_TABLE = 'cita';
 
@@ -33,7 +33,11 @@ const CitaSchema = {
   fraccion: {
     allowNull: false,
     type: DataTypes.TIME,
-    defaultValue: "00:30:00"
+    // defaultValue: "00:30:00"
+  },
+  hora:{
+    allowNull: false,
+    type: DataTypes.TIME,
   },
   fechaInicio: {
     allowNull: false,
@@ -83,6 +87,16 @@ const CitaSchema = {
     onUpdate:'CASCADE',
     onDelete: 'SET NULL'
   },
+  especialidadId: {
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    references: {
+      model: ESPECIALIDAD_TABLE,
+      key: 'id'
+    },
+    onUpdate:'CASCADE',
+    onDelete: 'SET NULL'
+  },
 
 };
 
@@ -92,6 +106,7 @@ class Cita extends Model {
 
     this.belongsTo(models.Persona, { as: 'paciente' });
     this.belongsTo(models.Persona, { as: 'medico' });
+    this.belongsTo(models.Persona, { as: 'especialidad' });
     this.belongsToMany(models.Examen, {
       as: 'pedidos',
       through: models.CitaExamen,

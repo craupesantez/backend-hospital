@@ -22,7 +22,7 @@ const CitaMedicamentoSchema = {
     onUpdate:'CASCADE',
     onDelete: 'SET NULL'
   },
-  examenId: {
+  medicamentoId: {
     allowNull: false,
     type: DataTypes.INTEGER,
     references: {

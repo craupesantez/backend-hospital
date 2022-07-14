@@ -39,12 +39,16 @@ const EspecialidadSchema = {
 }
 
 class Especialidad extends Model{
-  static associate(){
+  static associate(models){
     // puede o no puede que se deba incluir
     // this.hasOne(models.Persona, {
     //   as:'persona',
     //   foreignKey: 'especialidadId'
     // });
+    this.hasMany(models.Cita,{
+      as: 'especialidad_citas',
+      foreignKey: 'especialidadId'
+    });
   }
 
   static config(sequelize){
