@@ -36,6 +36,14 @@ const CitaExamenSchema = {
     allowNull: true,
     type: DataTypes.STRING
   },
+  file: {
+    allowNull: true,
+    type: DataTypes.STRING
+  },
+  detalleFile:{
+    allowNull: true,
+    type: DataTypes.STRING
+  }
 }
 
 class CitaExamen extends Model{

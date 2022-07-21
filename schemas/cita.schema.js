@@ -23,6 +23,8 @@ const medicamentoId = Joi.number().integer();
 const resultado = Joi.string();
 const indicaciones = Joi.string();
 const cantidad = Joi.number().integer();
+const file = Joi.string();
+const detalleFile = Joi.string();
 
 const createCitaSchema = Joi.object({
   motivo: motivo.required(),
@@ -61,6 +63,8 @@ const addExamenesSchema = Joi.object({
   citaId: citaId.required(),
   examenId: examenId.required(),
   resultado: resultado,
+  file: file,
+  detalleFile: detalleFile
 });
 
 

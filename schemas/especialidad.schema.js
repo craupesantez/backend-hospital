@@ -6,12 +6,14 @@ const activo = Joi.boolean();
 const usuarioRegistro = Joi.string();
 const usuarioActualizo = Joi.string();
 const fechaActualizo= Joi.date();
+const color = Joi.string();
 
 const createEspecialidadSchema = Joi.object({
   nombre: nombre.required(),
   activo: activo.required(),
   usuarioRegistro: usuarioRegistro,
   usuarioActualizo: usuarioActualizo,
+  color: color.required(),
 })
 
 const updateEspecialidadSchema = Joi.object({
@@ -19,7 +21,8 @@ const updateEspecialidadSchema = Joi.object({
   activo: activo,
   usuarioRegistro: usuarioRegistro,
   usuarioActualizo: usuarioActualizo,
-  fechaActualizo
+  fechaActualizo,
+  color
 })
 
 const getEspecialidadSchema = Joi.object({
