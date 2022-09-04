@@ -17,6 +17,10 @@ const UsuarioSchema = {
   contrasenia:{
     allowNull: false,
     type: DataTypes.STRING
+  },
+  recoveryToken:{
+    allowNull: true,
+    type: DataTypes.STRING
   }
 };
 

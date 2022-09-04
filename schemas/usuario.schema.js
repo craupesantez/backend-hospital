@@ -3,6 +3,7 @@ const Joi = require('joi');
 const id  = Joi.string().uuid();
 const username = Joi.string().min(8);
 const contrasenia = Joi.string().min(8);
+const recoveryToken = Joi.string();
 
 
 const createUsuarioSchema = Joi.object({
@@ -13,6 +14,7 @@ const createUsuarioSchema = Joi.object({
 const updateUsuarioSchema = Joi.object({
   username: username,
   contrasenia: contrasenia,
+  recoveryToken
 })
 
 const getUsuarioSchema = Joi.object({

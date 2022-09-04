@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const routerApi = require('./routes');
 const { checkApiKey } = require('./middlewares/auth.handler')
+const Logger = require('./utils/logger/logger')
+const logger = new Logger()
 
 const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
 
@@ -39,5 +41,9 @@ app.use(boomErrorHandler);
 app.use(errorHandler);
 
 app.listen(port, () => {
-  console.log('Mi port: ' + port);
+  logger.info('Mi port: ' + port);
+  //logger.info('Mensaje informativo')
+  //logger.warn('Mensaje de advertencia')
+  //logger.error('Mensaje de error')
+  //logger.info('Mensaje con datos', { user: 'John Smith' })
 });

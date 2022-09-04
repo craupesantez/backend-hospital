@@ -29,6 +29,17 @@ class UsuariosService {
     return rta;
   }
 
+  async findByCorreo(correo) {
+    const rta = await models.Usuario.findOne({
+      include: [{
+        association: 'persona',
+        where:{correo}
+      }],
+      //where: { correo }
+    });
+    return rta;
+  }
+
   async findOne(id) {
     const usuario = await models.Usuario.findByPk(id);
     if (!usuario) {

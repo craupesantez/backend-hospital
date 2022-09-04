@@ -21,9 +21,15 @@ class PersonasService {
       include: ['usuario']
     });
     delete newPersona.dataValues.usuario.dataValues.contrasenia;
+    delete newPersona.dataValues.usuario.dataValues.recoveryToken;
+    const nombre = 'PACIENTE';
+    const rolPaciente = await models.Rol.findOne({
+      include: [],
+      where:{nombre}
+    })
     const paciente = {
       personaId: newPersona.dataValues.id,
-      rolId: 2
+      rolId: rolPaciente.id
     };
     const newRolPaciente = await this.addRol(paciente);
     return newPersona;

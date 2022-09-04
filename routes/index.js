@@ -9,6 +9,8 @@ const rolesRouter = require('./roles.router');
 const catalogosRouter = require('./catalogos.router');
 const reportesRouter = require('./reportes.router');
 const usuariosRouter = require('./usuarios.router');
+const Logger  = require('../utils/logger/logger');
+const logger = new Logger();
 
 function routerApi(app){
   const router = express.Router();

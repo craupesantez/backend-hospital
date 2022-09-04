@@ -40,6 +40,10 @@ const EspecialidadSchema = {
     allowNull: true,
     type: DataTypes.STRING
   },
+  descripcion: {
+    allowNull: true,
+    type: DataTypes.STRING,
+  },
 }
 
 class Especialidad extends Model{

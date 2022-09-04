@@ -1,5 +1,5 @@
 'use strict';
-
+const { Model, DataTypes, Sequelize } = require('sequelize');
 const { PERSONA_TABLE} = require('./../models/persona.model');
 const { USUARIO_TABLE} = require('./../models/usuario.model');
 const { CATALOGO_TABLE} = require('./../models/catalogo.model');
@@ -10,7 +10,6 @@ const { MEDICAMENTO_TABLE} = require('./../models/medicamento.model');
 const { CITA_TABLE} = require('./../models/cita.model');
 const { PERSONA_ROL_TABLE} = require('./../models/persona-rol.model');
 const { PERSONA_ESPECIALIDAD_TABLE} = require('./../models/persona-especialidad.model');
-
 const { CITA_EXAMEN_TABLE} = require('./../models/cita-examen.model');
 const { CITA_MEDICAMENTO_TABLE} = require('./../models/cita-medicamento.model');
 
@@ -31,6 +30,10 @@ module.exports = {
       },
       contrasenia:{
         allowNull: false,
+        type: DataTypes.STRING
+      },
+      recoveryToken:{
+        allowNull: true,
         type: DataTypes.STRING
       }
     });
@@ -62,6 +65,66 @@ module.exports = {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       }
+    });
+    await queryInterface.createTable(ROL_TABLE, {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER
+      },
+      nombre: {
+        allowNull: false,
+        type: DataTypes.STRING
+      },
+      activo: {
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      }
+    });
+    await queryInterface.createTable(ESPECIALIDAD_TABLE, {
+      id:{
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER
+      },
+      nombre:{
+        allowNull: false,
+        type: DataTypes.STRING
+      },
+      descripcion: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      activo:{
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
+      fechaRegistro:{
+        allowNull: false,
+        type: DataTypes.DATE,
+        defaultValue: Sequelize.NOW
+      },
+      fechaActualizo:{
+        allowNull: false,
+        type: DataTypes.DATE,
+        defaultValue: Sequelize.NOW
+      },
+      usuarioRegistro:{
+        allowNull: true,
+        type: DataTypes.STRING
+      },
+      usuarioActualizo:{
+        allowNull: true,
+        type: DataTypes.STRING
+      },
+      color:{
+        allowNull: true,
+        type: DataTypes.STRING
+      },
     });
     await queryInterface.createTable(PERSONA_TABLE, {
       id: {
@@ -118,7 +181,7 @@ module.exports = {
           model: USUARIO_TABLE,
           key: 'id'
         },
-        onUpdate: 'CASCADE',
+        onUpdate:'CASCADE',
         onDelete: 'SET NULL'
       },
       catalogoId: {
@@ -128,7 +191,7 @@ module.exports = {
           model: CATALOGO_TABLE,
           key: 'id'
         },
-        onUpdate: 'CASCADE',
+        onUpdate:'CASCADE',
         onDelete: 'SET NULL'
       },
       generoId: {
@@ -138,7 +201,7 @@ module.exports = {
           model: CATALOGO_TABLE,
           key: 'id'
         },
-        onUpdate: 'CASCADE',
+        onUpdate:'CASCADE',
         onDelete: 'SET NULL'
       },
       tipoIdentificacionId: {
@@ -148,7 +211,7 @@ module.exports = {
           model: CATALOGO_TABLE,
           key: 'id'
         },
-        onUpdate: 'CASCADE',
+        onUpdate:'CASCADE',
         onDelete: 'SET NULL'
       },
       activo: {
@@ -156,58 +219,6 @@ module.exports = {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
-    });
-    await queryInterface.createTable(ROL_TABLE, {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER
-      },
-      nombre: {
-        allowNull: false,
-        type: DataTypes.STRING
-      },
-      activo: {
-        allowNull: false,
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-      }
-    });
-    await queryInterface.createTable(ESPECIALIDAD_TABLE, {
-      id:{
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER
-      },
-      nombre:{
-        allowNull: false,
-        type: DataTypes.STRING
-      },
-      activo:{
-        allowNull: false,
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-      },
-      fechaRegistro:{
-        allowNull: false,
-        type: DataTypes.DATE,
-        defaultValue: Sequelize.NOW
-      },
-      fechaActualizo:{
-        allowNull: false,
-        type: DataTypes.DATE,
-        defaultValue: Sequelize.NOW
-      },
-      usuarioRegistro:{
-        allowNull: true,
-        type: DataTypes.STRING
-      },
-      usuarioActualizo:{
-        allowNull: true,
-        type: DataTypes.STRING
-      }
     });
     await queryInterface.createTable(CITA_TABLE, {
       id: {
@@ -236,7 +247,11 @@ module.exports = {
       fraccion: {
         allowNull: false,
         type: DataTypes.TIME,
-        defaultValue: "00:30:00"
+        // defaultValue: "00:30:00"
+      },
+      hora:{
+        allowNull: false,
+        type: DataTypes.TIME,
       },
       fechaInicio: {
         allowNull: false,
@@ -285,7 +300,17 @@ module.exports = {
         },
         onUpdate:'CASCADE',
         onDelete: 'SET NULL'
-      }
+      },
+      especialidadId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        references: {
+          model: ESPECIALIDAD_TABLE,
+          key: 'id'
+        },
+        onUpdate:'CASCADE',
+        onDelete: 'SET NULL'
+      },
     });
     await queryInterface.createTable(EXAMEN_TABLE, {
       id: {
@@ -310,7 +335,7 @@ module.exports = {
         allowNull: false,
         type: DataTypes.BOOLEAN,
         defaultValue: true,
-      }
+      },
     });
     await queryInterface.createTable(MEDICAMENTO_TABLE, {
       id:{
@@ -365,7 +390,7 @@ module.exports = {
         allowNull: false,
         type: DataTypes.BOOLEAN,
         defaultValue: true,
-      }
+      },
     });
     await queryInterface.createTable(PERSONA_ROL_TABLE, {
       id:{
@@ -451,7 +476,15 @@ module.exports = {
         onDelete: 'SET NULL'
       },
       resultado: {
-        allowNull: false,
+        allowNull: true,
+        type: DataTypes.STRING
+      },
+      file: {
+        allowNull: true,
+        type: DataTypes.STRING
+      },
+      detalleFile:{
+        allowNull: true,
         type: DataTypes.STRING
       }
     });
@@ -472,7 +505,7 @@ module.exports = {
         onUpdate:'CASCADE',
         onDelete: 'SET NULL'
       },
-      examenId: {
+      medicamentoId: {
         allowNull: false,
         type: DataTypes.INTEGER,
         references: {
@@ -489,11 +522,11 @@ module.exports = {
       cantidad: {
         allowNull: false,
         type: DataTypes.INTEGER
-      }
+      },
     });
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
      await queryInterface.dropTable(CITA_MEDICAMENTO_TABLE);
      await queryInterface.dropTable(CITA_EXAMEN_TABLE);
      await queryInterface.dropTable(PERSONA_ESPECIALIDAD_TABLE);
