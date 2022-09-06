@@ -13,6 +13,11 @@ router.get('/', async (req, res) => {
   res.json(citas);
 })
 
+router.get('/citas-by-especialidad', async (req, res) => {
+  const citas = await service.contarCitasEspecialidad();
+  res.json(citas);
+})
+
 router.get('/pedidos', async (req, res) => {
   const pedidos = await service.findPedidoExamenes();
   res.json(pedidos);

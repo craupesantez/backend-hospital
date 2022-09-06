@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 router.get('/:id',
   validatorHandler(getCatalogoSchema, 'params'),
   async (req, res, next) => {
-    logger.debug('La ruta de /catalogos get por id');
+    // logger.debug('La ruta de /catalogos get por id');
     try {
       const { id } = req.params;
       const catalogo = await service.findOne(id);
@@ -27,7 +27,7 @@ router.get('/:id',
 router.post('/',
   validatorHandler(createCatalogoSchema, 'body'),
   async (req, res, next) => {
-    logger.debug('La ruta de /catalogos post');
+    // logger.debug('La ruta de /catalogos post');
     try {
       const body = req.body;
       res.status(201).json(await service.create(body));
@@ -40,7 +40,7 @@ router.patch('/:id',
   validatorHandler(getCatalogoSchema, 'params'),
   validatorHandler(updateCatalogoSchema, 'body'),
   async (req, res, next) => {
-    logger.debug('La ruta de /catalogos patch');
+    // logger.debug('La ruta de /catalogos patch');
     try {
       const { id } = req.params;
       const body = req.body;
@@ -53,7 +53,7 @@ router.patch('/:id',
   router.delete('/:id',
   validatorHandler(getCatalogoSchema, 'params'),
   async (req, res, next) => {
-    logger.info('La ruta de /catalogos delete');
+    // logger.info('La ruta de /catalogos delete');
     try {
       const { id } = req.params;
       res.status(200).json(await service.delete(id));

@@ -12,6 +12,16 @@ router.get('/', async (req, res) => {
   res.json(personas);
 })
 
+router.get('/pacientes', async (req, res) => {
+  const pacientes = await service.findPacientes();
+  res.json(pacientes);
+})
+
+router.get('/medicos', async (req, res) => {
+  const medicos = await service.findMedicos();
+  res.json(medicos);
+})
+
 router.get('/by-identificacion/:identificacion',
   validatorHandler(getPersonaByIdentificacionSchema, 'params'),
   async (req, res, next) => {

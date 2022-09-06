@@ -23,7 +23,7 @@ class CatalogosService{
 
   async findOne(id){
     const catalogo = await models.Catalogo.findByPk(id,{
-      include: ['personas']
+      // include: ['personas']
     });
     if(!catalogo){
       throw boom.notFound('catalogo no encontrado');

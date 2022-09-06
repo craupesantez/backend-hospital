@@ -1,5 +1,6 @@
 const boom = require('@hapi/boom');
 const { models } = require('./../libs/sequelize');
+const { Sequelize }  = require('Sequelize');
 
 
 class CitasService {
@@ -27,6 +28,21 @@ class CitasService {
   async find() {
     const rta = await models.Cita.findAll({
       include: ['estado', 'paciente', 'medico', 'pedidos', 'recetas'],
+    });
+    // rta.map((item) =>
+    //   delete item.dataValues.usuario.dataValues.contrasenia
+    // )
+    return rta;
+  }
+
+  async contarCitasEspecialidad() {
+    const rta = await models.Cita.count({
+      attributes:[
+        'especialidadId',
+         [sequelize.fn('count', sequelize.col('id')), 'total']
+      ],
+      group: especialidadId,
+      order: ['especialidadId', 'ASC'],
     });
     // rta.map((item) =>
     //   delete item.dataValues.usuario.dataValues.contrasenia

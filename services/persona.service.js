@@ -25,7 +25,7 @@ class PersonasService {
     const nombre = 'PACIENTE';
     const rolPaciente = await models.Rol.findOne({
       include: [],
-      where:{nombre}
+      where: { nombre }
     })
     const paciente = {
       personaId: newPersona.dataValues.id,
@@ -68,11 +68,39 @@ class PersonasService {
 
   async find() {
     const rta = await models.Persona.findAll({
-      include: ['usuario', 'catalogo', 'roles', 'genero', 'tipoIdentificacion','ramas'],
+      include: ['usuario', 'catalogo', 'roles', 'genero', 'tipoIdentificacion', 'ramas'],
     });
     rta.map((item) =>
       delete item.dataValues.usuario.dataValues.contrasenia
     )
+    return rta;
+  }
+
+  async findPacientes() {
+    const rta = await models.Persona.findAll({
+      include: ['catalogo',
+        {
+          association: 'roles',
+          where: { nombre: 'PACIENTE' }
+        },
+      ],
+      where: { activo: true }
+    },
+    );
+    return rta;
+  }
+
+  async findMedicos() {
+    const rta = await models.Persona.findAll({
+      include: ['catalogo',
+        {
+          association: 'roles',
+          where: { nombre: 'MEDICO' }
+        },
+      ],
+      where: { activo: true }
+    },
+    );
     return rta;
   }
 
@@ -88,7 +116,7 @@ class PersonasService {
     return persona;
   }
 
-  async findOneRol(id){
+  async findOneRol(id) {
     const personaRol = await models.PersonaRol.findByPk(id);
     if (!personaRol) {
       throw boom.notFound('Rol de la persona no encontrado');
@@ -96,7 +124,7 @@ class PersonasService {
     return personaRol;
   }
 
-  async findOneEspecialidad(id){
+  async findOneEspecialidad(id) {
     const personaEspecialidad = await models.PersonaEspecialidad.findByPk(id);
     if (!personaEspecialidad) {
       throw boom.notFound('Especialidad de la persona no encontrado');
@@ -115,22 +143,22 @@ class PersonasService {
     await persona.destroy();
     return { id };
   }
-  async deleteRol(id){
+  async deleteRol(id) {
     const personaRol = await this.findOneRol(id);
     await personaRol.destroy();
     return { id };
   }
 
-  async deleteEspecialidad(id){
+  async deleteEspecialidad(id) {
     const personaEspecialidad = await this.findOneEspecialidad(id);
     await personaEspecialidad.destroy();
     return { id };
   }
 
-  async findIdentificacion(identificacion){
-    const persona = await this.findOne({
-      where:  {identificacion: identificacion},
-  });
+  async findIdentificacion(identificacion) {
+    const persona = await models.Persona.findOne({
+      where: { identificacion: identificacion },
+    });
     return persona;
   }
 }
