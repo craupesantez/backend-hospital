@@ -25,6 +25,7 @@ const indicaciones = Joi.string();
 const cantidad = Joi.number().integer();
 const file = Joi.string();
 const detalleFile = Joi.string();
+const calificacion = Joi.number().integer();
 
 const createCitaSchema = Joi.object({
   motivo: motivo.required(),
@@ -53,6 +54,7 @@ const updateCitaSchema = Joi.object({
   pacienteId,
   medicoId,
   especialidadId,
+  calificacion,
 })
 
 const getCitaSchema = Joi.object({

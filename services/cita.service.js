@@ -1,6 +1,8 @@
 const boom = require('@hapi/boom');
-const { models } = require('./../libs/sequelize');
-const { Sequelize }  = require('Sequelize');
+const { models, sequelize } = require('./../libs/sequelize');
+const Sequelize = require('./../libs/sequelize');
+
+
 
 
 class CitasService {
@@ -36,19 +38,49 @@ class CitasService {
   }
 
   async contarCitasEspecialidad() {
-    const rta = await models.Cita.count({
-      attributes:[
-        'especialidadId',
-         [sequelize.fn('count', sequelize.col('id')), 'total']
-      ],
-      group: especialidadId,
-      order: ['especialidadId', 'ASC'],
-    });
-    // rta.map((item) =>
-    //   delete item.dataValues.usuario.dataValues.contrasenia
-    // )
-    return rta;
+    try {
+      const rta = await models.Cita.findAll({
+        attributes: [
+          'especialidadId',
+          [Sequelize.fn('count', Sequelize.col('id')), 'total']
+        ],
+        group: ['Cita.especialidadId'],
+        //  order: ['Cita.especialidadId', 'ASC']
+      });
+      rta.sort((a, b) => a.especialidadId - b.especialidadId)
+      return rta;
+    } catch (error) {
+      console.log(error);
+    }
+
   }
+
+  async getPromedioByMedico() {
+    try {
+      const rta = await models.Cita.findAll({
+        include: [{
+          association: 'medico',
+          attributes:['id','nombres','apellidos']
+        }],
+        attributes:[
+          'medicoId',
+           [Sequelize.fn('count', Sequelize.col('medicoId')), 'atenciones'],
+           [Sequelize.fn('avg', Sequelize.col('calificacion')), 'promedio']
+        ],
+         group: ['Cita.medicoId','medico.id', 'medico.nombres', 'medico.apellidos'],
+        //  order: ['Cita.especialidadId', 'ASC']
+      });
+      // const rta2 = rta.forEach((item) =>{
+      //   item.promedio=item.promedio.toFixed(2)
+      //   return item;
+      // })
+      return rta;
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+
 
   async findOne(id) {
     const cita = await models.Cita.findByPk(id, {
@@ -80,9 +112,9 @@ class CitasService {
 
   async findOnePedidoExamenes(id) {
     const pedido = await models.CitaExamen.findByPk(id,
-    //    {
-    //   include: ['estado', 'paciente', 'medico', 'pedidos', 'recetas'],
-    // }
+      //    {
+      //   include: ['estado', 'paciente', 'medico', 'pedidos', 'recetas'],
+      // }
     );
     if (!pedido) {
       throw boom.notFound('pedido no encontrado');
@@ -92,9 +124,9 @@ class CitasService {
 
   async findOneReceta(id) {
     const receta = await models.CitaMedicamento.findByPk(id,
-    //    {
-    //   include: ['estado', 'paciente', 'medico', 'pedidos', 'recetas'],
-    // }
+      //    {
+      //   include: ['estado', 'paciente', 'medico', 'pedidos', 'recetas'],
+      // }
     );
     if (!receta) {
       throw boom.notFound('receta no encontrado');

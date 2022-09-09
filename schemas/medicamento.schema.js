@@ -10,6 +10,13 @@ const costoUnidad = Joi.number();
 const costoCaja = Joi.number();
 const fechaVencimiento = Joi.date();
 const fechaActualizo = Joi.date();
+const presentComerId  = Joi.number().integer();
+const presentacionMedicaId  = Joi.number().integer();
+const codigo = Joi.string();
+const registroSanitario = Joi.string();
+const stockMaximo  = Joi.number().integer();
+const stockMinimo  = Joi.number().integer();
+const fechaRegistro = Joi.date();
 
 
 const createMedicamentoSchema = Joi.object({
@@ -21,6 +28,12 @@ const createMedicamentoSchema = Joi.object({
   costoUnidad: costoUnidad.required(),
   costoCaja,
   fechaVencimiento: fechaVencimiento.required(),
+  presentComerId,
+  presentacionMedicaId,
+  codigo,
+  registroSanitario,
+  stockMaximo,
+  stockMinimo,
 })
 
 const updateMedicamentoSchema = Joi.object({
@@ -32,7 +45,13 @@ const updateMedicamentoSchema = Joi.object({
   costoUnidad,
   costoCaja,
   fechaVencimiento,
-  fechaActualizo
+  fechaActualizo,
+  presentComerId,
+  presentacionMedicaId,
+  codigo,
+  registroSanitario,
+  stockMaximo,
+  stockMinimo,
 })
 
 const getMedicamentoSchema = Joi.object({

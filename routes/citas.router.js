@@ -18,6 +18,11 @@ router.get('/citas-by-especialidad', async (req, res) => {
   res.json(citas);
 })
 
+router.get('/get-promedio', async (req, res) => {
+  const citas = await service.getPromedioByMedico();
+  res.json(citas);
+})
+
 router.get('/pedidos', async (req, res) => {
   const pedidos = await service.findPedidoExamenes();
   res.json(pedidos);

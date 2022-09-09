@@ -97,6 +97,10 @@ const CitaSchema = {
     onUpdate:'CASCADE',
     onDelete: 'SET NULL'
   },
+  calificacion:{
+    allowNull: true,
+    type: DataTypes.INTEGER
+  }
 
 };
 

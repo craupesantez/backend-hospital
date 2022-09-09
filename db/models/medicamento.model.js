@@ -1,4 +1,5 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
+const { CATALOGO_TABLE } = require('./catalogo.model');
 
 const MEDICAMENTO_TABLE = 'medicamento';
 
@@ -56,11 +57,56 @@ const MedicamentoSchema = {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
   },
+  presentComerId: {
+    allowNull: true,
+    type: DataTypes.INTEGER,
+    references: {
+      model: CATALOGO_TABLE,
+      key: 'id'
+    },
+    onUpdate:'CASCADE',
+    onDelete: 'SET NULL'
+  },
+  presentacionMedicaId: {
+    allowNull: true,
+    type: DataTypes.INTEGER,
+    references: {
+      model: CATALOGO_TABLE,
+      key: 'id'
+    },
+    onUpdate:'CASCADE',
+    onDelete: 'SET NULL'
+  },
+  codigo:{
+    allowNull: true,
+    type: DataTypes.STRING,
+    unique: true,
+    // defaultValue: true,
+  },
+  registroSanitario:{
+    allowNull: true,
+    type: DataTypes.STRING,
+    // defaultValue: true,
+  },
+  stockMaximo: {
+    allowNull: true,
+    type: DataTypes.INTEGER
+  },
+  stockMinimo: {
+    allowNull: true,
+    type: DataTypes.INTEGER
+  },
+  fechaRegistro:{
+    allowNull: true,
+    type: DataTypes.DATE,
+    defaultValue: Sequelize.NOW
+  },
 }
 
 class Medicamento extends Model{
-  static associate(){
-
+  static associate(model){
+    this.belongsTo(models.Catalogo, { as: 'presentacionComercial' });
+    this.belongsTo(models.Catalogo, { as: 'presentacionMedicamento' });
   }
 
   static config(sequelize){
